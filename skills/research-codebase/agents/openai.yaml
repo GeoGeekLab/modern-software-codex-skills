@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research Codebase"
+  short_description: "Document current behavior with evidence"
+  default_prompt: "Use $research-codebase to document how this code works today with file and line references."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Coding Agent Contract"
+  short_description: "Apply repository engineering guardrails"
+  default_prompt: "Use $coding-agent-operating-contract to audit or establish portable engineering rules for this repository."

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "modern-software-codex-skills",
+  "version": "0.1.0",
+  "description": "Codex-ready software engineering skills adapted from public CS146S: The Modern Software Developer materials.",
+  "keywords": [
+    "codex",
+    "skills",
+    "software-engineering",
+    "cs146s",
+    "workflow"
+  ]
+}

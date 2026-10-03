@@ -1,0 +1,4 @@
+interface:
+  display_name: "Compact Dev Context"
+  short_description: "Write a resumable engineering handoff"
+  default_prompt: "Use $compact-development-context to capture the current development state for a fresh session."

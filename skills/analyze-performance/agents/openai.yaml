@@ -1,0 +1,4 @@
+interface:
+  display_name: "Analyze Performance"
+  short_description: "Measure before optimizing"
+  default_prompt: "Use $analyze-performance to investigate this performance problem with repeatable measurements and code references."

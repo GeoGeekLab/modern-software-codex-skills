@@ -1,0 +1,4 @@
+interface:
+  display_name: "Make Proposals"
+  short_description: "Compare two grounded approaches"
+  default_prompt: "Use $make-proposals with the research document to compare up to two implementation approaches."

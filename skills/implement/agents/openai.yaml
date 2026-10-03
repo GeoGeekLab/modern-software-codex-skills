@@ -1,0 +1,4 @@
+interface:
+  display_name: "Implement Plan"
+  short_description: "Execute an approved plan"
+  default_prompt: "Use $implement to execute the approved plan, preserve scope, and verify the result."

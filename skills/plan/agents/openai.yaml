@@ -1,0 +1,4 @@
+interface:
+  display_name: "Plan Change"
+  short_description: "Write an executable design"
+  default_prompt: "Use $plan to write a scoped implementation plan from the current evidence. Do not implement it."

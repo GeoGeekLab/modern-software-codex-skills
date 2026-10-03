@@ -1,0 +1,4 @@
+interface:
+  display_name: "Engineering Workflow"
+  short_description: "Route a task through the needed stages"
+  default_prompt: "Use $software-engineering-workflow to choose the shortest path from investigation through review."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Explore Codebase"
+  short_description: "Map an unfamiliar code area"
+  default_prompt: "Use $explore to map this code area: entry points, dependencies, files, data flow, and state."

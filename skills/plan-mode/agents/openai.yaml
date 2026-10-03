@@ -1,0 +1,4 @@
+interface:
+  display_name: "Plan Mode"
+  short_description: "Investigate read-only before editing"
+  default_prompt: "Use $plan-mode to research this broad change and write a plan without modifying product code."
