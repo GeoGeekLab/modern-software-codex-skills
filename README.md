@@ -54,7 +54,22 @@ review ----------> independent diff check
 
 The reusable course skills stay close to the original wording. Codex-specific changes live in the adapter layer. Source snapshots and provenance live next to the adapted skills and in [`SOURCE-MAP.md`](SOURCE-MAP.md).
 
-## Quick start
+## Install
+
+Ask Codex:
+
+```text
+Install the Codex skills from https://github.com/GeoGeekLab/modern-software-codex-skills.
+Use the repository's plugin and skills structure, then validate the installation.
+```
+
+Already inside the repository:
+
+```text
+Install the skills in this repository into my Codex setup and validate them.
+```
+
+### Manual
 
 Validate the repository:
 
@@ -81,6 +96,8 @@ ${CODEX_HOME:-$HOME/.codex}/skills
 ```
 
 Existing skill directories stay unchanged. Pass `--force` to replace them.
+
+### Contributor commands
 
 List bundled skills:
 
