@@ -1,8 +1,13 @@
 # modern-software-codex-skills
 
-`CS146S -> Codex`
 
-A Codex-oriented port of selected prompt and skill material from
+
+<p align="center">
+  <img width="513" height="379" alt="image" src="https://github.com/user-attachments/assets/3f5f7748-5295-48a8-b55e-df97769315e4" />
+</p>
+
+`CS146S -> Codex`
+A Codex-oriented port of selected prompt and skill material from  
 [CS146S: The Modern Software Developer](https://themodernsoftware.dev/).
 
 The repository preserves the engineering workflows, removes runtime-specific coupling, and packages them as normal Codex skills.
