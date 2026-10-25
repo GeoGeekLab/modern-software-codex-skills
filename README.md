@@ -4,7 +4,7 @@
 
 <!-- GeoGeekLab VIS: BEGIN -->
 <p align="center">
-  <a href="https://github.com/GeoGeekLab/geogeeklab-visual-identity/tree/main/new-mascots/modern-software-codex-skills"><img src="https://raw.githubusercontent.com/GeoGeekLab/geogeeklab-visual-identity/main/new-mascots/modern-software-codex-skills/concept-readme-hero.svg" alt="Builder Beaver — modern software and coding workflow mascot" width="740"></a>
+  <img src="https://raw.githubusercontent.com/GeoGeekLab/geogeeklab-visual-identity/main/readme-artwork/v3/modern-software-codex-skills/readme-artwork.webp" alt="Builder Beaver coding with a laptop and construction tools" width="390">
 </p>
 <!-- GeoGeekLab VIS: END -->
 
