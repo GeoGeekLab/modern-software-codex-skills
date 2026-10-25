@@ -2,9 +2,11 @@
 
 
 
+<!-- GeoGeekLab VIS: BEGIN -->
 <p align="center">
-  <img width="513" height="379" alt="image" src="https://github.com/user-attachments/assets/3f5f7748-5295-48a8-b55e-df97769315e4" />
+  <a href="https://github.com/GeoGeekLab/geogeeklab-visual-identity/tree/main/new-mascots/modern-software-codex-skills"><img src="https://raw.githubusercontent.com/GeoGeekLab/geogeeklab-visual-identity/main/new-mascots/modern-software-codex-skills/concept-readme-hero.svg" alt="Builder Beaver — modern software and coding workflow mascot" width="740"></a>
 </p>
+<!-- GeoGeekLab VIS: END -->
 
 `CS146S -> Codex`
 A Codex-oriented port of selected prompt and skill material from  
