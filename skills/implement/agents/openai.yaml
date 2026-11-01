@@ -1,4 +1,4 @@
 interface:
   display_name: "Implement Plan"
-  short_description: "Execute an approved plan"
-  default_prompt: "Use $implement to execute the approved plan, preserve scope, and verify the result."
+  short_description: "Implement the specified plan markdown"
+  default_prompt: "Use $implement to implement the plan markdown I provide."

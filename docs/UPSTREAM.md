@@ -1,30 +1,9 @@
-# Upstream handling
+# Upstream maintenance policy
 
-The repository separates the Codex adaptation layer from source snapshots.
+1. Locate the primary public source. Record its exact URL, the retrieval date, and whether it can be accessed independently.
+2. Determine whether the material is an actual `SKILL.md` sample, an assignment, a lecture topic, or a runtime/system prompt. Do not merge these categories.
+3. Keep the old `references/original-SKILL.md` snapshot unchanged until the source is verified. When it is verified, record its origin and permissible reuse terms.
+4. Apply only the documented Codex adaptations to active `SKILL.md`; update [../SOURCE-MAP.md](../SOURCE-MAP.md) whenever the mapping changes.
+5. Run `make validate`. Then test three expected activations, one near-miss, and an actual end-to-end execution in the target agent. Save the observed results; do not infer them from JSON fixtures.
 
-## Adaptation layer
-
-```text
-skills/*/SKILL.md
-skills/*/agents/openai.yaml
-scripts/*
-docs/*
-```
-
-These files track Codex conventions.
-
-## Source snapshots
-
-```text
-skills/*/references/original-*.md
-```
-
-These files preserve source text for provenance and diffing.
-
-Source sync procedure:
-
-1. fetch the verified public source;
-2. update the matching snapshot verbatim;
-3. record the source URL and sync date in `SOURCE-MAP.md`;
-4. keep compatibility changes in the adapted `SKILL.md`;
-5. keep source attribution attached to the snapshot.
+The historical October 1 folder has not been independently checked in the November 1 audit. Course website and instructor assignments have been checked.

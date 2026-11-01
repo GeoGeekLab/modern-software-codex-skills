@@ -1,4 +1,4 @@
 interface:
   display_name: "Review Changes"
-  short_description: "Review the current git diff"
-  default_prompt: "Use $review to inspect staged and unstaged changes and return prioritized findings."
+  short_description: "Prioritize uncommitted diff findings"
+  default_prompt: "Use $review to inspect staged and unstaged changes and report prioritized action items."

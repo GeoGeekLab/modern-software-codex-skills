@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
+"""Static integrity checks for the six source-constrained CS146S sample adapters.
+
+This does NOT run an agent or prove that activation prompts trigger.
+"""
 from __future__ import annotations
 
+from collections import Counter
 import json
 import re
 import sys
@@ -8,9 +13,16 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SKILLS = ROOT / "skills"
-NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
-LINK_RE = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
-
+EXPECTED = {
+    "explore",
+    "research-codebase",
+    "make-proposals",
+    "plan",
+    "implement",
+    "review",
+}
+NAME = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+LOCAL_LINK = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 errors: list[str] = []
 
 
@@ -18,134 +30,158 @@ def fail(message: str) -> None:
     errors.append(message)
 
 
-def parse_frontmatter(path: Path) -> dict[str, str]:
-    text = path.read_text(encoding="utf-8")
-    lines = text.splitlines()
+def read(path: Path) -> str:
+    return path.read_text(encoding="utf-8")
+
+
+def normalized(text: str) -> str:
+    return text.rstrip("\n") + "\n"
+
+
+def frontmatter(path: Path) -> dict[str, str]:
+    lines = read(path).splitlines()
     if not lines or lines[0] != "---":
         fail(f"{path.relative_to(ROOT)}: missing YAML frontmatter")
         return {}
     try:
         end = lines.index("---", 1)
     except ValueError:
-        fail(f"{path.relative_to(ROOT)}: unterminated YAML frontmatter")
+        fail(f"{path.relative_to(ROOT)}: unterminated frontmatter")
         return {}
-
-    data: dict[str, str] = {}
+    metadata: dict[str, str] = {}
     for line in lines[1:end]:
         if not line.strip():
             continue
         if ":" not in line:
-            fail(f"{path.relative_to(ROOT)}: invalid frontmatter line: {line!r}")
+            fail(f"{path.relative_to(ROOT)}: invalid frontmatter: {line}")
             continue
         key, value = line.split(":", 1)
-        data[key.strip()] = value.strip().strip('"').strip("'")
-    return data
+        metadata[key.strip()] = value.strip().strip("\"'")
+    return metadata
 
 
-def check_local_links(path: Path) -> None:
-    text = path.read_text(encoding="utf-8")
-    for target in LINK_RE.findall(text):
-        if target.startswith(("http://", "https://", "#", "mailto:")):
+def check_links(path: Path) -> None:
+    for link in LOCAL_LINK.findall(read(path)):
+        if link.startswith(("https://", "http://", "#", "mailto:")):
             continue
-        target = target.split("#", 1)[0]
-        if not target:
-            continue
-        resolved = (path.parent / target).resolve()
-        if not resolved.exists():
-            fail(f"{path.relative_to(ROOT)}: broken local link -> {target}")
+        relative = link.split("#", 1)[0]
+        if relative and not (path.parent / relative).resolve().exists():
+            fail(f"{path.relative_to(ROOT)}: broken local link {relative}")
+
+
+def expected_adapter(name: str, source: str) -> str:
+    # The only allowed changes are documented in SOURCE-MAP.md.
+    adapted = source.replace("disable-model-invocation: true\n", "")
+    adapted = adapted.replace(f"invokes /{name}", f"invokes ${name}")
+    if name == "make-proposals":
+        adapted = adapted.replace(
+            "Keep the list to two or three distinct proposals",
+            "Keep the list to at most two distinct proposals",
+        )
+    if name == "implement":
+        adapted = adapted.replace(
+            "Implement the plan described in /path/to/plan_md.",
+            "Implement the plan described in the plan markdown file provided for this invocation.",
+        )
+    return normalized(adapted)
 
 
 if not SKILLS.is_dir():
     fail("skills/: missing")
+    actual: set[str] = set()
 else:
-    for skill_dir in sorted(p for p in SKILLS.iterdir() if p.is_dir()):
-        skill = skill_dir.name
-        skill_md = skill_dir / "SKILL.md"
-        if not skill_md.is_file():
-            fail(f"skills/{skill}: missing SKILL.md")
-            continue
+    actual = {path.name for path in SKILLS.iterdir() if path.is_dir()}
+if actual != EXPECTED:
+    fail(f"skills/: expected {sorted(EXPECTED)}, found {sorted(actual)}")
 
-        meta = parse_frontmatter(skill_md)
-        if set(meta) != {"name", "description"}:
-            fail(f"skills/{skill}/SKILL.md: frontmatter must contain only name + description")
-        if meta.get("name") != skill:
-            fail(f"skills/{skill}/SKILL.md: name must match directory")
-        if not NAME_RE.match(skill):
-            fail(f"skills/{skill}: invalid kebab-case skill name")
-        if not meta.get("description", "").strip():
-            fail(f"skills/{skill}/SKILL.md: empty description")
+for name in sorted(EXPECTED & actual):
+    directory = SKILLS / name
+    active = directory / "SKILL.md"
+    source = directory / "references" / "original-SKILL.md"
+    ui = directory / "agents" / "openai.yaml"
+    if not active.is_file() or not source.is_file():
+        fail(f"skills/{name}: missing active SKILL.md or historical source snapshot")
+        continue
+    metadata = frontmatter(active)
+    if set(metadata) != {"name", "description"}:
+        fail(f"skills/{name}: frontmatter must have name and description only")
+    if metadata.get("name") != name or not NAME.fullmatch(name):
+        fail(f"skills/{name}: invalid name")
+    if not metadata.get("description"):
+        fail(f"skills/{name}: missing trigger description")
+    if normalized(read(active)) != expected_adapter(name, read(source)):
+        fail(f"skills/{name}: adapter drift from the documented source transformations")
+    check_links(active)
+    if not ui.is_file():
+        fail(f"skills/{name}: missing optional Codex UI metadata")
+    else:
+        for field in ("display_name:", "short_description:", "default_prompt:"):
+            if field not in read(ui):
+                fail(f"skills/{name}: UI metadata missing {field}")
 
-        check_local_links(skill_md)
-
-        ui = skill_dir / "agents" / "openai.yaml"
-        if not ui.is_file():
-            fail(f"skills/{skill}: missing agents/openai.yaml")
-        else:
-            ui_text = ui.read_text(encoding="utf-8")
-            for required in ("display_name:", "short_description:", "default_prompt:"):
-                if required not in ui_text:
-                    fail(f"skills/{skill}/agents/openai.yaml: missing {required[:-1]}")
-
-        adapted = skill_md.read_text(encoding="utf-8")
-        banned = {
-            "disable-model-invocation:": "Claude-only frontmatter",
-            "EnterPlanMode": "Claude-only tool name",
-            "ExitPlanMode": "Claude-only tool name",
-            "AskUserQuestion": "Claude-only tool name",
-        }
-        for token, reason in banned.items():
-            if token in adapted:
-                fail(f"skills/{skill}/SKILL.md: contains {reason}: {token}")
+plan_template = SKILLS / "plan" / "design_doc_template.md"
+if not plan_template.is_file():
+    fail("skills/plan/design_doc_template.md: missing source template")
 
 plugin = ROOT / "plugin.json"
 if not plugin.is_file():
     fail("plugin.json: missing")
 else:
     try:
-        payload = json.loads(plugin.read_text(encoding="utf-8"))
+        data = json.loads(read(plugin))
+        if data.get("name") != "modern-software-codex-skills":
+            fail("plugin.json: unexpected name")
+        if data.get("$schema") != "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json":
+            fail("plugin.json: unexpected schema")
+        if data.get("version") != "0.2.0":
+            fail("plugin.json: version must match 0.2.0")
     except json.JSONDecodeError as exc:
         fail(f"plugin.json: invalid JSON: {exc}")
-    else:
-        if payload.get("$schema") != "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json":
-            fail("plugin.json: unexpected schema")
-        if payload.get("name") != "modern-software-codex-skills":
-            fail("plugin.json: unexpected plugin name")
-        if not payload.get("version"):
-            fail("plugin.json: missing version")
 
-
-# Validate activation cases.
-evals = ROOT / "evals" / "cases.jsonl"
-if not evals.is_file():
+fixtures = ROOT / "evals" / "cases.jsonl"
+counts: Counter[tuple[str, str]] = Counter()
+if not fixtures.is_file():
     fail("evals/cases.jsonl: missing")
 else:
-    known = {p.name for p in SKILLS.iterdir() if p.is_dir()}
-    for lineno, line in enumerate(evals.read_text(encoding="utf-8").splitlines(), 1):
+    for line_number, line in enumerate(read(fixtures).splitlines(), 1):
         if not line.strip():
             continue
         try:
             case = json.loads(line)
         except json.JSONDecodeError as exc:
-            fail(f"evals/cases.jsonl:{lineno}: invalid JSON: {exc}")
+            fail(f"evals/cases.jsonl:{line_number}: {exc}")
             continue
-        if case.get("skill") not in known:
-            fail(f"evals/cases.jsonl:{lineno}: unknown skill {case.get('skill')!r}")
-        if case.get("expected") not in {"trigger", "skip"}:
-            fail(f"evals/cases.jsonl:{lineno}: expected must be trigger or skip")
+        skill, expectation = case.get("skill"), case.get("expected")
+        if skill not in EXPECTED or expectation not in {"trigger", "skip"}:
+            fail(f"evals/cases.jsonl:{line_number}: bad skill or expectation")
+            continue
         if not isinstance(case.get("prompt"), str) or not case["prompt"].strip():
-            fail(f"evals/cases.jsonl:{lineno}: prompt must be non-empty")
+            fail(f"evals/cases.jsonl:{line_number}: empty prompt")
+        counts[(skill, expectation)] += 1
 
-for doc in (ROOT / "README.md", ROOT / "SOURCE-MAP.md", ROOT / "NOTICE.md"):
-    if doc.is_file():
-        check_local_links(doc)
+for skill in sorted(EXPECTED):
+    if counts[(skill, "trigger")] != 3 or counts[(skill, "skip")] != 1:
+        fail(f"evals/{skill}: expected 3 trigger fixtures and 1 near-miss fixture")
+
+for path in (
+    ROOT / "README.md",
+    ROOT / "README.zh-CN.md",
+    ROOT / "SOURCE-MAP.md",
+    ROOT / "NOTICE.md",
+    ROOT / "docs" / "SCOPE.md",
+    ROOT / "docs" / "UPSTREAM.md",
+    ROOT / "evals" / "README.md",
+):
+    if not path.is_file():
+        fail(f"{path.relative_to(ROOT)}: missing")
     else:
-        fail(f"{doc.name}: missing")
+        check_links(path)
 
 if errors:
-    print("validation failed", file=sys.stderr)
+    print("STATIC VALIDATION FAILED", file=sys.stderr)
     for error in errors:
         print(f"- {error}", file=sys.stderr)
     sys.exit(1)
 
-count = len([p for p in SKILLS.iterdir() if p.is_dir()])
-print(f"ok: {count} skills, plugin manifest, local links, UI metadata")
+print(f"STATIC VALIDATION PASSED: {len(EXPECTED)} source-mapped skills; 24 fixture prompts.")
+print("NOTE: Model activation and end-to-end execution were NOT tested.")

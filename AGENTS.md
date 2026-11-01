@@ -1,34 +1,25 @@
-# Repository contract
+# Repository agent instructions
 
-This repository ports public CS146S software-engineering prompts and skills to Codex.
+This is a third-party Codex compatibility package for **six historical sample skills**. It is not an official CS146S distribution.
 
-## Invariants
+## Repository-specific rules
 
-- Preserve upstream intent.
-- Keep Codex-specific changes narrow and explicit.
-- Keep `SKILL.md` procedural and lean. Put long source material in `references/`.
-- Use model-specific tool names only when the workflow depends on them.
-- Extend an existing skill when it already expresses the user goal.
-- Keep factual investigation separate from proposals and implementation.
-- Keep implementation inside the approved plan.
-- Treat `references/original-*` as source snapshots; update them only during a source sync.
+- Use `SOURCE-MAP.md` to identify which files come from historical snapshots and which are local packaging.
+- Keep `skills/*/references/original-SKILL.md` unchanged unless a primary-source verification justifies synchronization.
+- Do not add new “course skills” from lectures, assignment topic suggestions, Claude system prompts, or generic best practices.
+- Preserve the source-to-adapter comparison in `scripts/validate.py`.
+- Keep the original `plan/design_doc_template.md` content unchanged.
+- Add or change human-written evaluation fixtures only with a clear distinction between expected and observed behavior.
+- Do not claim that validation of files proves a model ran a skill.
 
-## Required checks
+## Commands
 
-Run:
+- Static validation: `make validate`
+- List packaged skills: `make list`
+- Build ZIP packages: `make dist`
 
-```bash
-make validate
-```
+## Change boundaries
 
-before completing a repository change.
-
-A source-derived skill change updates `SOURCE-MAP.md` and `CHANGELOG.md` in the same change.
-
-## Style
-
-- Prefer terse technical prose.
-- Prefer ASCII diagrams over decorative diagrams.
-- Use plain engineering language.
-- Badges report real automated signals.
-- Repository text contains no generated-by notices or model signatures.
+- `skills/*/SKILL.md`: only source-backed content and documented runtime changes.
+- `agents/openai.yaml`, `scripts/`, `docs/`, and `evals/`: local compatibility and maintenance files.
+- `references/original-SKILL.md`: historical source snapshots; do not silently edit or relicense.

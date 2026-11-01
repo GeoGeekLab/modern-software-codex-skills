@@ -1,52 +1,34 @@
 ---
 name: review
-description: Review all uncommitted changes, staged and unstaged, and return prioritized findings with file and line references. Use for diff review, pre-commit review, or when the user invokes $review.
+description: Reviews all uncommitted changes (staged and unstaged) and produces a prioritized action list with file and line references. Use when the user asks for a code review of uncommitted changes, a diff review, or invokes $review.
 ---
 
-Perform a comprehensive review of all uncommitted changes and produce prioritized action items.
+Perform a comprehensive review of all uncommitted changes (staged and unstaged) and produce prioritized action items.
 
-## Collect context
+## What this does
+- Gathers and reviews all uncommitted changes in the current branch
+- Produces a prioritized list of action items with file:line references
 
-Inspect:
+## Steps
+1. Collect change context:
+   - `git status --porcelain`
+   - `git diff`
+   - `git diff --cached`
+   - `git diff HEAD`
+   - `git log --oneline -n 5`
+2. Analyze changes for security, performance, style, consistency, missing edge cases, dependency impacts, and integration risks.
+3. Output a summary and a single prioritized action list using indicators:
+   - 🔴 must-fix
+   - 🟡 recommended
+   - 🟢 consider
 
-```bash
-git status --porcelain
-git diff
-git diff --cached
-git diff HEAD
-git log --oneline -n 5
+## Output template
 ```
-
-Use equivalent commands when the repository state makes one of these inappropriate.
-
-## Review for
-
-- correctness and regressions;
-- security and data-loss impact;
-- missing edge cases;
-- integration and dependency impact;
-- performance problems caused by the change;
-- repository-specific style or contract violations;
-- missing verification where it materially affects confidence.
-
-## Severity
-
-- `[P0]` must fix: release blocker, security flaw, data loss, broken contract, or deterministic correctness failure.
-- `[P1]` should fix: likely bug, missing edge case, or material integration/performance impact.
-- `[P2]` consider: lower-impact maintainability issue with concrete engineering value.
-
-Report only evidence-backed findings. Correctness outranks cosmetic preferences.
-
-## Output
-
-```markdown
 ## Code Review
 
 Summary: <1-2 sentences>
 
-Findings:
-1. [P0] <actionable finding> in `path:line`
-2. [P1] <actionable finding> in `path:start-end`
+Action Items:
+1. <indicator> <action> in `path:line`
+2. <indicator> <action> in `path:start-end`
 ```
-
-When there are no material findings, report that result and list any unperformed verification.
