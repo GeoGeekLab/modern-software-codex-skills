@@ -1,15 +1,11 @@
-# Activation cases
+# Week 3-inspired activation fixtures
 
-`cases.jsonl` is a small, model-agnostic set of discovery cases.
+The [CS146S 2026 Week 3 assignment](https://github.com/mihail911/modern-software-dev-assignments/blob/master/week3/assignment.md) requires:
+- Three prompts that **should** trigger a Skill.
+- One near-miss prompt that **should not** trigger it.
+- An actual run of the Skill in a real repository.
+- A manual execution of the workflow before encoding it.
 
-Each row contains:
+`cases.jsonl` records **expected** activation behavior only. It has three `trigger` and one `skip` prompt per sample. `make validate` checks the data structure, but **does not launch Codex or test behavior**.
 
-```json
-{"skill":"explore","expected":"trigger","prompt":"..."}
-```
-
-`trigger` means the named skill should be considered for the request.
-
-`skip` means the named skill should not be the primary workflow for the request. Another bundled skill may be appropriate.
-
-These cases are intentionally short. They test routing boundaries, not output quality.
+For an actual evaluation, run the workflow manually; then submit each prompt to the target agent in an appropriate repository, record whether the skill activated, and capture evidence. Execute the skill end-to-end and complete [RUN-REPORT-TEMPLATE.md](RUN-REPORT-TEMPLATE.md). If you have not run it, leave the outcome as `NOT RUN`. Do not present predicted trigger behavior as evidence.

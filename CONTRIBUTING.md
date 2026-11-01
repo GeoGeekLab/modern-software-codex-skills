@@ -1,35 +1,13 @@
 # Contributing
 
-Keep changes small enough to audit.
+This package prioritizes **source fidelity over features**.
 
-## Skill changes
+1. Verify whether the proposed content is an actual public source `SKILL.md`. Lecture subjects, exercises, runtime prompts and your own workflows are not source skills.
+2. Provide an inspectable upstream URL and retrieval date. Record whether attribution and reuse rights are confirmed.
+3. Preserve the source snapshot and list each exact compatibility difference in `SOURCE-MAP.md`.
+4. If an existing active skill changes, update `scripts/validate.py`'s comparison only for the documented difference.
+5. Run `make validate` and, where practical, perform the manual and end-to-end tests required by the Fall 2026 Week 3 assignment. Put observations in the run report. Do not record invented results.
 
-For an upstream-derived skill:
+No unsourced skill is included in the six-sample default distribution. Local extensions belong in a clearly separate project or category.
 
-1. identify the source in `SOURCE-MAP.md`;
-2. preserve original behavior; record Codex compatibility changes explicitly;
-3. document semantic changes;
-4. update source snapshots only during a verified source sync;
-5. run `make validate`.
-
-For a new local skill:
-
-1. target one recognizable user goal;
-2. use only `name` and `description` in `SKILL.md` frontmatter;
-3. put trigger conditions in the description;
-4. define input, steps, output, and stop conditions in the body;
-5. add `agents/openai.yaml` for Codex UI metadata;
-6. add the skill to the README table and validation cases.
-
-## Commit shape
-
-A source-derived skill change normally touches:
-
-```text
-skills/<name>/SKILL.md
-skills/<name>/agents/openai.yaml
-SOURCE-MAP.md
-CHANGELOG.md
-```
-
-Keep unrelated skill rewrites in separate commits.
+References: [Week 3 assignment](https://github.com/mihail911/modern-software-dev-assignments/blob/master/week3/assignment.md) and [SOURCE-MAP.md](SOURCE-MAP.md).

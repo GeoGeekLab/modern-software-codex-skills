@@ -1,25 +1,9 @@
-# Notice
+# Source and licensing notice
 
-## Source
+This repository is an independent project, **not endorsed by or affiliated with Stanford University**.
 
-This repository adapts selected public material from:
+The six `references/original-SKILL.md` files are historical snapshots previously attributed in this repository to course-linked materials. The November 1, 2026 audit could not independently access their upstream Drive folder or confirm their copyright owner and license.
 
-> CS146S: The Modern Software Developer  
-> https://themodernsoftware.dev/
+Do not assume that the repository's MIT license grants rights to these third-party source texts. The MIT license applies only to repository-authored tooling, metadata, and documentation to the extent owned by this repository. The active adapters closely reproduce the historical sample text and are subject to the original texts' applicable rights.
 
-Source files and mappings are recorded in `SOURCE-MAP.md`.
-
-## Adaptation
-
-The Codex layer:
-
-1. packages reusable workflows as `SKILL.md`;
-2. translates runtime-specific tool and invocation assumptions;
-3. moves long source text into `references/`;
-4. adds validation, packaging, installation, and workflow documentation.
-
-## License scope
-
-The MIT license covers repository-authored adapters, scripts, and documentation.
-
-Course prompt snapshots under `references/original-*` retain their source attribution and are outside the MIT grant.
+See [SOURCE-MAP.md](SOURCE-MAP.md) for provenance, verified course references and the limitations of the source audit.

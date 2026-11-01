@@ -1,84 +1,52 @@
 # modern-software-codex-skills
 
-`CS146S -> Codex`
+本仓库仅保留六个 **以已有来源快照为依据** 的 Codex Skill 适配版本。
 
-这是对 [CS146S: The Modern Software Developer](https://themodernsoftware.dev/) 公开 prompt / skill 材料的 Codex 整理版。
+**本仓库不是斯坦福官方项目，也不是 CS146S 官方 Skill 合集。** 2026 年第三周的[官方作业](https://github.com/mihail911/modern-software-dev-assignments/blob/master/week3/assignment.md)要求学生自行挑选一个重复性工作流程、手动执行、编写 Skill 并测试触发与真实执行，并未规定六个必须安装的 Skill。
 
-目标很简单：保留有效的软件工程工作流，移除运行时耦合，并整理成可安装、可验证、可维护的 Codex skills。
+这六份原始 `SKILL.md` 快照来自此仓库此前收录、标注为 2026-10-01 课程链接资料的文件。**本次核查无法独立打开其原始 Drive 文件夹，不能据此断言这些样例是课程官方原创。** 参见 [SOURCE-MAP.md](SOURCE-MAP.md)。
 
-```text
-需求
- |
- v
-Explore     快速建立代码地图
- |
- v
-Research    固定当前事实
- |
- v
-Proposals   比较实现路径
- |
- v
-Plan        形成可执行设计
- |
- v
-Implement   按计划修改
- |
- v
-Review      检查实际 diff
-```
+## 保留的六个样例
 
-## 使用
+| Skill | 原始职责 |
+| --- | --- |
+| `explore` | 阅读代码，解释入口、调用关系、文件布局和数据流；除非要求，否则不运行代码 |
+| `research-codebase` | 仅记录现状，提供文件和行号，不提改进方案 |
+| `make-proposals` | 基于已有研究文档比较解决方案 |
+| `plan` | 使用原始设计文档模板撰写计划，不实施 |
+| `implement` | 执行指定的计划 Markdown 文件 |
+| `review` | 审查暂存区和未暂存的改动，按原样例的红／黄／绿等级输出 |
 
-验证：
+这六项**不是课程规定的强制顺序**。此前添加的工作流路由器及由系统提示词、压缩提示词等衍生的 Skill 已移除。
+
+## 安装
 
 ```bash
 make validate
-```
-
-安装全部 skills：
-
-```bash
 ./scripts/install.sh all
 ```
 
-安装部分 skills：
+指定安装：
 
 ```bash
-./scripts/install.sh explore research-codebase plan implement review
+./scripts/install.sh explore research-codebase review
 ```
 
-默认目录：
+默认位置是 `${CODEX_HOME:-$HOME/.codex}/skills`。不会默认覆盖已有 Skill；需要覆盖时使用 `--force`。
 
-```text
-${CODEX_HOME:-$HOME/.codex}/skills
-```
+## 与原文的差异
 
-已有 skill 目录默认保持不变。使用 `--force` 覆盖。
+- 移除 Claude 专属的 `disable-model-invocation` 元数据。这意味着 Codex 的自动触发语义可能与原样例不同。
+- 将原样例 `/skill-name` 调用写法换成 Codex `$skill-name`。
+- 将 `implement` 中的占位路径换成当前提供的计划文件。
+- `make-proposals` 原文同时出现“至多两个”和“两或三个”，适配版采用“至多两个”，并记录这一取舍。
+- 将原始 `design_doc_template.md` 放到 `plan` 目录下。
+- `research-codebase` 的原文 `context7` 依赖保持不变；本仓库不会自动安装它。
 
-构建发布包：
+`make validate` 仅检查**静态格式、原文对应关系和测试用例文件**，不等于已验证模型触发或端到端执行。
 
-```bash
-make dist
-```
+官方第三周要求每个 Skill 测试三个应触发提示、一个不应触发提示，并完成真实运行。仓库提供[待执行用例](evals/cases.jsonl)和[记录模板](evals/RUN-REPORT-TEMPLATE.md)，**没有伪造测试成绩**。
 
-## 整理原则
+课程来源：[官网](https://themodernsoftware.dev/) · [官方作业仓库](https://github.com/mihail911/modern-software-dev-assignments) · [第三周作业](https://github.com/mihail911/modern-software-dev-assignments/blob/master/week3/assignment.md)。
 
-- 原始 skill 保留原意和主要结构。
-- Claude 专属工具名、路径和运行时语义只做 Codex 兼容替换。
-- 长原文放进 `references/`。
-- 调研、方案、计划、实现、审查保持分层。
-- 小修改使用短流程。
-- 有意改动记录在 `SOURCE-MAP.md`。
-
-## 来源
-
-来源：[themodernsoftware.dev](https://themodernsoftware.dev/)。
-
-`SOURCE-MAP.md` 记录课程材料、原文快照和 Codex 适配文件之间的映射。
-
-## License
-
-本仓库原创的适配层、脚本和文档使用 MIT License。
-
-`references/original-*` 中的课程原文快照保留原来源归属，不包含在上述 MIT 授权范围内。详见 `NOTICE.md`。
+来源可信度、适配细节和授权边界分别见 [SOURCE-MAP.md](SOURCE-MAP.md)、[docs/SCOPE.md](docs/SCOPE.md)、[NOTICE.md](NOTICE.md)。

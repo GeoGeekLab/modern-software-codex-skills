@@ -1,6 +1,6 @@
 ---
 name: explore
-description: Explore an unfamiliar area of a codebase and brief the user on purpose, entry points, call graph, file layout, and data flow. Use for codebase orientation, feature-area exploration, or when the user invokes $explore. Run code only when the task calls for execution.
+description: Explores an unfamiliar area of the codebase and briefs the user on purpose, entry points, call graph, file layout, and data flow. Use when the user asks to explore the codebase, get oriented in an area, or invokes $explore. Do not execute code unless asked.
 ---
 
 Explore the unfamiliar area of this codebase and brief me. Focus on clarity and concision.
@@ -15,4 +15,4 @@ What to produce:
 How to explore:
 - Start by reading the primary entry file, then follow imports to map dependencies.
 - Skim tests, fixtures, or example scripts to see intended behavior.
-- Note setup steps required to run or reproduce behavior. Execute only when the task calls for it.
+- Note any setup steps required to run or reproduce behavior, but do not execute unless asked.

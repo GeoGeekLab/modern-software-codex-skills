@@ -1,201 +1,67 @@
 # modern-software-codex-skills
 
+A **source-constrained** Codex adaptation of six sample `SKILL.md` files previously collected from materials linked in Stanford CS146S: The Modern Software Developer (Fall 2026).
 
+**Not an official Stanford repository or an official CS146S skill pack.** The course's [Week 3 assignment](https://github.com/mihail911/modern-software-dev-assignments/blob/master/week3/assignment.md) asks students to **author and test their own skill**. It does not prescribe this six-skill collection.
 
-<!-- GeoGeekLab VIS: BEGIN -->
-<p align="center">
-  <img src="https://raw.githubusercontent.com/GeoGeekLab/geogeeklab-visual-identity/main/readme-artwork/v3/modern-software-codex-skills/readme-artwork.webp" alt="Builder Beaver coding with a laptop and construction tools" width="390">
-</p>
-<!-- GeoGeekLab VIS: END -->
+These six files are retained because this repository already held corresponding source snapshots attributed to a course-linked October 1 resource folder. **The source folder's contents were not independently accessible during the November 1, 2026 audit.** Therefore their attribution is recorded as a historical repository claim, not as newly verified course authorship. See [SOURCE-MAP.md](SOURCE-MAP.md).
 
-`CS146S -> Codex`
-A Codex-oriented port of selected prompt and skill material from  
-[CS146S: The Modern Software Developer](https://themodernsoftware.dev/).
+## Included samples
 
-The repository preserves the engineering workflows, removes runtime-specific coupling, and packages them as normal Codex skills.
-
-```text
-request
-   |
-   v
-explore ---------> fast code map
-   |
-   v
-research --------> factual baseline
-   |
-   v
-proposals -------> explicit trade-offs
-   |
-   v
-plan ------------> executable design
-   |
-   v
-implement -------> scoped change
-   |
-   v
-review ----------> independent diff check
-   |
-   +-------------> compact when context gets expensive
-```
-
-## What is here
-
-| Skill | Job |
+| Name | Original sample's purpose |
 | --- | --- |
-| `explore` | Map an unfamiliar code area without changing it. |
-| `research-codebase` | Document current behavior with file and line references. |
-| `make-proposals` | Compare grounded implementation approaches. |
-| `plan` | Write a design/implementation plan. |
-| `plan-mode` | Run read-only investigation before a non-trivial change. |
-| `implement` | Execute an approved plan. |
-| `review` | Review staged and unstaged changes by severity. |
-| `analyze-performance` | Run a measurement-first performance investigation. |
-| `compact-development-context` | Produce a resumable engineering handoff. |
-| `coding-agent-operating-contract` | Port the reusable parts of the course's agent operating rules. |
-| `software-engineering-workflow` | Route a task through only the stages it needs. |
+| `explore` | Orient in a code area without executing code unless asked. |
+| `research-codebase` | Record existing behavior, with paths and line references; no improvement proposals. |
+| `make-proposals` | Form solutions from a `research-codebase` document. |
+| `plan` | Write a plan using the included original design document template; do not implement. |
+| `implement` | Implement a specified plan markdown file. |
+| `review` | Review staged and unstaged changes with the original red/yellow/green action levels. |
 
-The reusable course skills stay close to the original wording. Codex-specific changes live in the adapter layer. Source snapshots and provenance live next to the adapted skills and in [`SOURCE-MAP.md`](SOURCE-MAP.md).
+**There is no required course-defined sequence connecting these samples.** Invoke the skill relevant to your request. The repository's former workflow-router and prompt-derived skills were removed because they were local inventions, not identified sample skills.
 
-## Install
-
-Ask Codex:
-
-```text
-Install the Codex skills from https://github.com/GeoGeekLab/modern-software-codex-skills.
-Use the repository's plugin and skills structure, then validate the installation.
-```
-
-Already inside the repository:
-
-```text
-Install the skills in this repository into my Codex setup and validate them.
-```
-
-### Manual
-
-Validate the repository:
+## Install in Codex
 
 ```bash
 make validate
-```
-
-Install every skill:
-
-```bash
 ./scripts/install.sh all
 ```
 
-Install a subset:
+To install individual samples:
 
 ```bash
-./scripts/install.sh explore research-codebase plan implement review
+./scripts/install.sh explore research-codebase plan
 ```
 
-Default target:
+The destination is `${CODEX_HOME:-$HOME/.codex}/skills`. Existing skill directories are not overwritten without `--force`.
 
-```text
-${CODEX_HOME:-$HOME/.codex}/skills
-```
+Each skill has a minimal standard `SKILL.md`. The `agents/openai.yaml` file is **local Codex UI metadata**, not a course artifact. `plugin.json`, installer, packager and static checks are also local packaging utilities.
 
-Existing skill directories stay unchanged. Pass `--force` to replace them.
+## Source fidelity
 
-### Contributor commands
+The `references/original-SKILL.md` files preserve the pre-existing source snapshots. The active `SKILL.md` files differ only where necessary for the runtime or to resolve one identified source inconsistency:
 
-List bundled skills:
+- Remove the Claude-specific `disable-model-invocation` frontmatter. **This changes automatic activation behavior**, which cannot be represented by this repository's minimal Agent Skills metadata.
+- Render the original `/name` invocation examples as Codex `$name` examples.
+- Replace the `implement` sample's literal placeholder `/path/to/plan_md` with the provided plan file.
+- Resolve the `make-proposals` sample's contradictory “two or three” line to its stated “up to two” maximum.
+- Put `plan/design_doc_template.md` where the original plan sample expects it.
+- Keep the original `context7` reference in `research-codebase`. It is **not bundled**: third-party API research requires the tool to be available.
 
-```bash
-make list
-```
+Run `make validate` to check **static** format, expected source-to-adapter transformations, and evaluation fixtures. This does **not** prove model activation or skill execution.
 
-Build one ZIP per skill plus a repository ZIP:
+## Course-aligned evaluation (not yet executed)
 
-```bash
-make dist
-```
+Per the official Week 3 rubric, every sample has **three expected-to-trigger prompts and one near-miss** in [evals/cases.jsonl](evals/cases.jsonl). These are test **fixtures**, not recorded test results. For each skill, perform the workflow manually once, check the four activation prompts against an actual Codex session, run one end-to-end case in a real repository, and record evidence using [the report template](evals/RUN-REPORT-TEMPLATE.md). No real-run pass rate is claimed.
 
-## Portable plugin layout
+## Primary course references
 
-The repository root contains [`plugin.json`](plugin.json). Codex-compatible plugin hosts can discover the root `skills/` directory.
+- [CS146S Fall 2026 course site](https://themodernsoftware.dev/)
+- [CS146S Fall 2026 official assignments](https://github.com/mihail911/modern-software-dev-assignments)
+- [Week 3: Author a Skill](https://github.com/mihail911/modern-software-dev-assignments/blob/master/week3/assignment.md)
+- [Agent Skills specification](https://agentskills.io/specification)
 
-```text
-modern-software-codex-skills/
-├── plugin.json
-├── skills/
-│   ├── explore/
-│   │   ├── SKILL.md
-│   │   ├── agents/openai.yaml
-│   │   └── references/
-│   └── ...
-├── docs/
-├── scripts/
-└── SOURCE-MAP.md
-```
-
-Each `SKILL.md` keeps frontmatter small:
-
-```yaml
----
-name: explore
-description: ...
----
-```
-
-Codex uses `name` and `description` for discovery. The body loads after skill selection.
-
-## Design rules
-
-```text
-facts != proposals
-proposals != plan
-plan != implementation
-implementation != review
-```
-
-- Investigation produces facts.
-- Proposal work compares options.
-- Planning defines the implementation contract.
-- Implementation follows the selected plan.
-- Review evaluates the actual diff.
-- Source semantics stay intact except where Codex compatibility needs a translation.
-- Long source material lives in `references/`.
-- Codex-native capabilities replace Claude-specific tool names.
-- Small tasks use small workflows.
-
-See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the stage contract.
-
-## Source
-
-The source material is linked from:
-
-- [The Modern Software Developer](https://themodernsoftware.dev/)
-- the 2026-09-24 coding-agent prompt materials
-- the 2026-10-01 reusable skill materials
-
-[`SOURCE-MAP.md`](SOURCE-MAP.md) records source-to-skill mappings and intentional compatibility changes.
+For source scope, verification status, and attribution, read [SOURCE-MAP.md](SOURCE-MAP.md), [docs/SCOPE.md](docs/SCOPE.md), and [NOTICE.md](NOTICE.md).
 
 ## License
 
-Repository-authored adapters, scripts, and documentation use the MIT license.
-
-Course prompt snapshots under `references/original-*` retain their source attribution and sit outside that MIT grant. See [`NOTICE.md`](NOTICE.md).
-
-## References
-
-Codex skill/plugin packaging:
-
-- https://developers.openai.com/plugins/build/skills
-- https://developers.openai.com/plugins/build/plugins
-
-`evals/cases.jsonl` contains lightweight activation cases for routing boundaries.
-
-## Maintenance
-
-Before a commit that changes a skill:
-
-```bash
-make validate
-```
-
-Changes to source-derived behavior also update `SOURCE-MAP.md`.
-
-No magic prompt. Just explicit state transitions.
+Original repository-authored packaging and documentation are MIT-licensed. The historical sample snapshots are **not** relicensed by this repository. See [NOTICE.md](NOTICE.md).

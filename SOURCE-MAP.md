@@ -1,68 +1,54 @@
-# Source map
+# Source map and verification status
 
-This repository reorganizes selected public material linked by [CS146S: The Modern Software Developer](https://themodernsoftware.dev/) into Codex-compatible skills.
+**Audit date:** 2026-11-01. This repository is a third-party Codex adaptation; it is not affiliated with Stanford.
 
-The mapping makes each source-to-adapter change directly inspectable.
+## Independently verified course sources
 
-## 2026-09-24 — coding-agent prompt internals
+1. [CS146S Fall 2026 course website](https://themodernsoftware.dev/) — course scope includes MCP, agent skills, spec-driven development, loop engineering, and software factory.
+2. [Instructor's official Fall 2026 assignment repository](https://github.com/mihail911/modern-software-dev-assignments).
+3. [Week 3: Author a Skill](https://github.com/mihail911/modern-software-dev-assignments/blob/master/week3/assignment.md) — requires a real repeatable workflow, judgment, manual run, three trigger tests, one non-trigger test, and an end-to-end run.
+4. [Week 4: Make a Messy Repo Agent-Ready](https://github.com/mihail911/modern-software-dev-assignments/blob/master/week4/assignment.md) — evaluates a *repository-specific* AGENTS.md or CLAUDE.md, **not** a published Skill.
+5. [Week 5: Agent-Readiness Report](https://github.com/mihail911/modern-software-dev-assignments/blob/master/week5/assignment.md) — compares three reports, **not** a published Skill.
+6. [Agent Skills specification](https://agentskills.io/specification) — documents `SKILL.md` format.
 
-Course folder:
+The Week 3 assignment recommends [mattpocock/skills](https://github.com/mattpocock/skills) as a **third-party sample collection**. It does not identify it as a Stanford-authored set.
 
-https://drive.google.com/drive/folders/1c6_atVW0RrqEBWsNIscG2KNwCiuPxWQG?usp=drive_link
+## Six historical sample snapshots (not independently upstream-verified)
 
-| Upstream item | Source snapshot | Codex adapter | Adapter notes |
-| --- | --- | --- | --- |
-| `system_prompt.md` | `skills/coding-agent-operating-contract/references/original-system-prompt.md` | `coding-agent-operating-contract` | Keeps portable engineering rules; drops Claude runtime/model assumptions. |
-| `config_files.md` | `skills/coding-agent-operating-contract/references/original-config-files.md` | `coding-agent-operating-contract` | Maps project-level `CLAUDE.md` ideas to provider-neutral repository guidance such as `AGENTS.md`. |
-| `tool_list.md` | `skills/coding-agent-operating-contract/references/original-tool-list.md` | `coding-agent-operating-contract` | Keeps the tool list as provenance while Codex capabilities come from the active runtime. |
-| `plan_mode.md` | `skills/plan-mode/references/original-plan-mode.md` | `plan-mode` | Preserves read-only planning intent; removes hard dependencies on Claude-only tool names and exit semantics. |
-| `subagent_prompt.md` | `skills/analyze-performance/references/original-subagent-prompt.md` | `analyze-performance` | Generalizes the repository-specific performance task into a reusable measurement-first skill. |
-| `compaction_prompt.md` | `skills/compact-development-context/references/original-compaction-prompt.md` | `compact-development-context` | Preserves handoff structure; removes runtime-specific output requirements and any request for hidden reasoning. |
+The previous version of this repository associated these six snapshots with a [course-linked October 1 Drive folder](https://drive.google.com/drive/folders/1aEHCXzZKkokuA4AYjD_2i6OrcM5iQosW?usp=drive_link). During this audit the folder could not be independently read. We preserve the snapshots and historical attribution for comparison; **do not treat the linkage or authorship as independently proven**.
 
-Direct source files:
+| Historical snapshot | Active Codex adapter | Documented changes |
+| --- | --- | --- |
+| [explore original](skills/explore/references/original-SKILL.md) | [explore](skills/explore/SKILL.md) | Remove Claude-only invocation flag; `/explore` -> `$explore` in description |
+| [research-codebase original](skills/research-codebase/references/original-SKILL.md) | [research-codebase](skills/research-codebase/SKILL.md) | Remove invocation flag; `/research-codebase` -> `$research-codebase` in description; retain Context7 dependence |
+| [make-proposals original](skills/make-proposals/references/original-SKILL.md) | [make-proposals](skills/make-proposals/SKILL.md) | Remove flag; `/make-proposals` -> `$make-proposals` in description; make “two or three” consistent with the original “up to two” bound |
+| [plan original](skills/plan/references/original-SKILL.md) | [plan](skills/plan/SKILL.md) | Remove flag; `/plan` -> `$plan` in description; use original [template](skills/plan/design_doc_template.md) at its source-expected location |
+| [implement original](skills/implement/references/original-SKILL.md) | [implement](skills/implement/SKILL.md) | Remove flag; `/implement` -> `$implement` in description; replace hard-coded example path with the supplied plan file |
+| [review original](skills/review/references/original-SKILL.md) | [review](skills/review/SKILL.md) | Remove flag; `/review` -> `$review` in description; restore original emoji severity markers |
 
-- `system_prompt.md`: https://drive.google.com/file/d/1iABC8ZEqDrazIBxOuZkQeDXjWWhyXuw9/view
-- `config_files.md`: https://drive.google.com/file/d/1o_mswpLvqwOvIg1oafFi01xx2NU4WkM0/view
-- `tool_list.md`: https://drive.google.com/file/d/1hWpX0oyNa_APSatFZH4-Re3MXpRNv8xb/view
-- `plan_mode.md`: https://drive.google.com/file/d/1ben7eiAjEre_6lNl_QrIVyJZF9X3hPKZ/view
-- `subagent_prompt.md`: https://drive.google.com/file/d/17HypCtg5px_B_RwoqOWJ27OhoQGQKZdK/view
-- `compaction_prompt.md`: https://drive.google.com/file/d/1RU5Gi9olltNQV-qs2_MEwzmYfRiY2_FC/view
+**Original source ambiguity:** The `make-proposals` snapshot says “up to two” and “two distinct” but later says “two or three.” The adapter changes only the contradictory line; the untouched snapshot remains available.
 
-## 2026-10-01 — reusable skills
+**Runtime limitation:** Removing `disable-model-invocation: true` is a behavior change, not a semantics-preserving no-op. This metadata is not part of the minimal Agent Skills specification. Whether a skill activates automatically depends on the Codex host. All six should be explicitly invoked if the original manual-selection behavior matters.
 
-Course folder:
+**Tool limitation:** The `research-codebase` snapshot names `context7`. This package does not provide that tool. Without it, that particular third-party documentation step cannot run as originally written.
 
-https://drive.google.com/drive/folders/1aEHCXzZKkokuA4AYjD_2i6OrcM5iQosW?usp=drive_link
+## Removed third-party derivations
 
-| Upstream skill | Snapshot | Codex adapter | Intentional difference |
-| --- | --- | --- | --- |
-| `explore` | `skills/explore/references/original-SKILL.md` | `skills/explore/SKILL.md` | Invocation wording only; core procedure remains close to upstream. |
-| `research-codebase` | `skills/research-codebase/references/original-SKILL.md` | `skills/research-codebase/SKILL.md` | Replaces the named third-party docs tool with current authoritative documentation. |
-| `make-proposals` | `skills/make-proposals/references/original-SKILL.md` | `skills/make-proposals/SKILL.md` | Resolves the source's “up to two” vs “two or three” ambiguity to **at most two**. |
-| `plan` | `skills/plan/references/original-SKILL.md` | `skills/plan/SKILL.md` | Keeps template-driven planning; tightens the handoff/verification contract. |
-| `design_doc_template.md` | `skills/plan/references/design_doc_template.md` | same | Preserved as the plan template reference. |
-| `implement` | `skills/implement/references/original-SKILL.md` | `skills/implement/SKILL.md` | Expands the one-line upstream command into a Codex execution contract. |
-| `review` | `skills/review/references/original-SKILL.md` | `skills/review/SKILL.md` | Replaces decorative severity markers with `P0/P1/P2`; findings require concrete evidence. |
+The earlier repository treated course-linked **agent prompt examples** and an invented multi-skill workflow as installable course skills. The following directories were removed from `skills/` (their previous contents remain in Git history):
 
-## Local additions
+- `coding-agent-operating-contract`: derived from system/config/tool prompts, not a sourced Skill.
+- `plan-mode`: derived from a plan-mode prompt, not a sourced Skill.
+- `compact-development-context`: derived from a compaction prompt, not a sourced Skill.
+- `analyze-performance`: generalized from a subagent prompt, not a sourced Skill.
+- `software-engineering-workflow`: repository-authored orchestration/router, not a course Skill.
 
-These are not course source files:
+There is **no promise of full CS146S coverage**. Course topics, exercise ideas, and vendor tools must not be converted into new “course skills” without an explicitly verified Skill source and the correct attribution.
 
-- `software-engineering-workflow`: orchestration/router skill for the adapted set.
-- `skills/*/agents/openai.yaml`: Codex UI metadata.
-- `plugin.json`: portable Agent Plugins manifest.
-- `scripts/`: validation, installation, and packaging helpers.
-- `docs/`: architecture and upstream-maintenance notes.
+## Adapter provenance policy
 
-## Compatibility policy
+- `references/original-SKILL.md`: unchanged historical snapshot; no claim that the course owns copyright.
+- `SKILL.md`: mechanically derived adapter, checked by `scripts/validate.py` against the snapshot.
+- `agents/openai.yaml`, `plugin.json`, `scripts/`, `evals/`: local engineering utilities, not course materials.
+- `evals/cases.jsonl`: unexecuted hypotheses for triggering; the validator does not run a model.
 
-Codex-specific changes stay narrow.
-
-1. `SKILL.md` frontmatter contains only `name` and `description`.
-2. User-invoked examples use `$skill-name` where explicit invocation helps.
-3. Adapted skills use Codex-available capabilities instead of Claude-only tool names.
-4. Long source text stays in `references/` rather than being injected on every invocation.
-5. Output contracts contain task state and user-visible rationale.
-6. Source snapshots preserve upstream wording for provenance and diffing.
-
-Last source audit: 2026-10-03.
+Do not update a snapshot from secondary summaries. Confirm a public primary source, capture its URL and retrieval date, and document any ownership or licensing restriction before changing the corresponding adapter.

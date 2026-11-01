@@ -1,22 +1,24 @@
-{"skill":"explore","expected":"trigger","prompt":"Map the webhook processing path in this repo. I need the entry points, call graph, and state changes. Do not run anything."}
-{"skill":"explore","expected":"skip","prompt":"Implement the already approved plan in plans/webhook-retry.md and run its tests."}
-{"skill":"research-codebase","expected":"trigger","prompt":"Document exactly how tenant authorization works today, with file and line references. Do not recommend changes."}
-{"skill":"research-codebase","expected":"skip","prompt":"Compare two designs for replacing the authorization cache using research/auth-cache.md."}
-{"skill":"make-proposals","expected":"trigger","prompt":"Using research/job-queue.md, give me two implementation approaches for delayed jobs with trade-offs and validation steps."}
-{"skill":"make-proposals","expected":"skip","prompt":"Show me how delayed jobs are currently implemented. I only want current-state facts."}
-{"skill":"plan","expected":"trigger","prompt":"Write a scoped implementation plan for the selected approach. Do not change product code."}
-{"skill":"plan","expected":"skip","prompt":"Apply the approved plan and verify the resulting diff."}
-{"skill":"plan-mode","expected":"trigger","prompt":"This refactor touches auth, billing, and migrations. Investigate read-only first and produce a plan. Do not edit product code yet."}
-{"skill":"plan-mode","expected":"skip","prompt":"Fix the typo in README.md and nothing else."}
-{"skill":"implement","expected":"trigger","prompt":"Implement plans/rate-limit.md exactly, preserve unrelated working-tree changes, and run the listed checks."}
-{"skill":"implement","expected":"skip","prompt":"Review my staged and unstaged changes for bugs and regressions."}
-{"skill":"review","expected":"trigger","prompt":"Review the current git diff. Prioritize correctness, security, and integration findings with file and line references."}
-{"skill":"review","expected":"skip","prompt":"Benchmark the current storage implementation at 1k, 10k, and 50k records without modifying production data."}
-{"skill":"analyze-performance","expected":"trigger","prompt":"Measure why list operations slow down as the dataset grows. Include benchmarks, complexity, and concurrency risks."}
-{"skill":"analyze-performance","expected":"skip","prompt":"Give me a quick map of the storage package and its call graph. Do not execute code."}
-{"skill":"compact-development-context","expected":"trigger","prompt":"Create a handoff summary so I can continue this coding task in a fresh session without losing decisions, tests, or pending work."}
-{"skill":"compact-development-context","expected":"skip","prompt":"Write the implementation plan for the cache invalidation change."}
-{"skill":"coding-agent-operating-contract","expected":"trigger","prompt":"Audit this repository's persistent agent instructions for controlled edits, truthful verification, and Codex compatibility."}
-{"skill":"coding-agent-operating-contract","expected":"skip","prompt":"Review the current uncommitted diff for concrete defects."}
-{"skill":"software-engineering-workflow","expected":"trigger","prompt":"Take this non-trivial feature from codebase investigation through an approved plan, implementation, and final diff review. Use only the stages that are needed."}
-{"skill":"software-engineering-workflow","expected":"skip","prompt":"Explain what the function parse_id does in src/id.py."}
+{"skill":"explore","expected":"trigger","prompt":"Explore the payments code area. Show entry points, call graph, and data flow, without running it."}
+{"skill":"explore","expected":"trigger","prompt":"Give me a codebase orientation for the webhook package: key files and dependencies only."}
+{"skill":"explore","expected":"trigger","prompt":"Map how request state moves through this unfamiliar feature. Do not execute commands."}
+{"skill":"explore","expected":"skip","prompt":"Implement the already written payment retry plan and run tests."}
+{"skill":"research-codebase","expected":"trigger","prompt":"Research and document how tenant authorization currently works, with exact file and line references. No improvements."}
+{"skill":"research-codebase","expected":"trigger","prompt":"Write a research document under research/ describing today's caching behavior."}
+{"skill":"research-codebase","expected":"trigger","prompt":"Trace the current login flow in code and record file:line citations only, no suggestions."}
+{"skill":"research-codebase","expected":"skip","prompt":"Suggest two approaches to redesign tenant authorization using the existing research file."}
+{"skill":"make-proposals","expected":"trigger","prompt":"Using research/queues.md, propose approaches to add delayed jobs. Include trade-offs."}
+{"skill":"make-proposals","expected":"trigger","prompt":"Based on the research-codebase document, generate up to two implementation proposals for caching."}
+{"skill":"make-proposals","expected":"trigger","prompt":"We have research/auth.md. Compare two grounded solutions and validation methods for session expiry."}
+{"skill":"make-proposals","expected":"skip","prompt":"Please document the current authentication architecture, without recommending any changes."}
+{"skill":"plan","expected":"trigger","prompt":"Make a plan for the selected change and write it in plans/ using the design document template; do not code."}
+{"skill":"plan","expected":"trigger","prompt":"Draft an implementation design document for this feature. Only a plan markdown file, no implementation."}
+{"skill":"plan","expected":"trigger","prompt":"Use the supplied design_doc_template.md to plan the migration and identify files to edit."}
+{"skill":"plan","expected":"skip","prompt":"Execute the existing plan markdown and make the code changes."}
+{"skill":"implement","expected":"trigger","prompt":"Implement the plan in plans/retry.md."}
+{"skill":"implement","expected":"trigger","prompt":"Execute the plan markdown file at plans/auth-migration.md."}
+{"skill":"implement","expected":"trigger","prompt":"Apply the implementation described in the supplied plan.md file."}
+{"skill":"implement","expected":"skip","prompt":"Write a design plan for the new endpoint but do not change any code."}
+{"skill":"review","expected":"trigger","prompt":"Review all staged and unstaged code changes and prioritize actionable findings."}
+{"skill":"review","expected":"trigger","prompt":"Review the current uncommitted diff for security and integration issues with file references."}
+{"skill":"review","expected":"trigger","prompt":"Do a precommit review of my working tree, including git diff --cached."}
+{"skill":"review","expected":"skip","prompt":"Explore the files and call graph for the authentication subsystem; do not review changes."}

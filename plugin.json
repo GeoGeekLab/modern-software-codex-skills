@@ -1,13 +1,12 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "modern-software-codex-skills",
-  "version": "0.1.0",
-  "description": "Codex-ready software engineering skills adapted from public CS146S: The Modern Software Developer materials.",
+  "version": "0.2.0",
+  "description": "Independent Codex adapters for six historically course-linked CS146S sample Skill files; not an official Stanford skill pack.",
   "keywords": [
     "codex",
     "skills",
-    "software-engineering",
     "cs146s",
-    "workflow"
+    "source-fidelity"
   ]
 }
